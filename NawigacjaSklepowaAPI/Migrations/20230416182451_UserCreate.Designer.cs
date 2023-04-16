@@ -11,7 +11,7 @@ using NawigacjaSklepowaAPI.Data;
 namespace NawigacjaSklepowaAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230415183029_UserCreate")]
+    [Migration("20230416182451_UserCreate")]
     partial class UserCreate
     {
         /// <inheritdoc />
@@ -33,15 +33,19 @@ namespace NawigacjaSklepowaAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
