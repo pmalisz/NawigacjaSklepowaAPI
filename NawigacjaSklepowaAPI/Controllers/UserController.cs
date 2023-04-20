@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NawigacjaSklepowaAPI.Services.Interfaces;
+using NawigacjaSklepowaAPI.Attributes;
+using NawigacjaSklepowaAPI.Data;
 
 namespace NawigacjaSklepowaAPI.Controllers
 {
@@ -14,7 +16,9 @@ namespace NawigacjaSklepowaAPI.Controllers
             _userService = userService;
         }
 
-        [HttpGet, Authorize]
+        [Authorize]
+        [RequiresClaim(Identity.AppAdminUserClaimName, "true")]
+        [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
             var users = await _userService.GetAll();
@@ -22,7 +26,7 @@ namespace NawigacjaSklepowaAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}"), Authorize]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {
             var user = await _userService.GetById(id);

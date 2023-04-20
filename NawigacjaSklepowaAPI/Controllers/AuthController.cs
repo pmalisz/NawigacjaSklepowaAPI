@@ -18,6 +18,8 @@ namespace NawigacjaSklepowaAPI.Controllers
             _jwtProvider = jwtProvider;
         }
 
+
+        //TODO: przerobić rejestracje tak, żeby była możliwa też rejestracja sklepu
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegistrationDto request)
         {
