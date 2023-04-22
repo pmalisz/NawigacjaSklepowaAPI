@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NawigacjaSklepowaAPI.Data.Entities;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.IO;
+using System.Threading.Channels;
+using System.Threading;
 
 namespace NawigacjaSklepowaAPI.Data
 {
@@ -9,6 +13,9 @@ namespace NawigacjaSklepowaAPI.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Shop> Shops { get; set; }
+        public DbSet<Company> Companies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
