@@ -4,6 +4,7 @@ using NawigacjaSklepowaAPI.Data;
 using NawigacjaSklepowaAPI.Data.Entities;
 using NawigacjaSklepowaAPI.Models.Auth;
 using NawigacjaSklepowaAPI.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace NawigacjaSklepowaAPI.Services
 {
@@ -19,6 +20,36 @@ namespace NawigacjaSklepowaAPI.Services
         }
 
         public async Task<(bool IsUserRegistered, string Message)> Register(UserRegistrationDto request)
+        {
+            bool success;
+            string message;
+
+            (success, message) = checkPassword(request);
+            if(!success)
+                return (false, message);
+
+            (success, message) = checkEmail(request);
+            if (!success)
+                return (false, message);
+            
+            User user = _mapper.Map<User>(request);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return (true, "");
+        }
+
+        public async Task<User?> Login(UserLoginDto request)
+        {
+            var user = await _context.Users.Where(u => u.Email == request.Email).SingleOrDefaultAsync();
+            if (user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+                return null;
+
+            return user;
+        }
+
+        private (bool, string) checkPassword(UserRegistrationDto request)
         {
             // Check if password is strong enough
             var min_chars = 8;
@@ -43,26 +74,20 @@ namespace NawigacjaSklepowaAPI.Services
             if (request.Password != request.ConfirmPassword)
                 return (false, "Hasła nie są takie same.");
 
-            // Check if user with given email already exists
-            if (_context.Users.Any(u => u.Email.ToLower() == request.Email.ToLower()))
-                return (false, "Użytkownik z takim emailem już istnieje.");
-
-
-            User user = _mapper.Map<User>(request);
-            user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
             return (true, "");
         }
 
-        public async Task<User?> Login(UserLoginDto request)
+        private (bool, string) checkEmail(UserRegistrationDto request)
         {
-            var user = await _context.Users.Where(u => u.Email == request.Email).SingleOrDefaultAsync();
-            if (user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
-                return null;
+            // Check if email address is correct
+            bool isValid = new EmailAddressAttribute().IsValid(request.Email);
+            if (!isValid)
+                return (false, "Niepoprawny adres email.");
 
-            return user;
+            // Check if user with given email already exists
+            if (_context.Users.Any(u => u.Email.ToLower() == request.Email.ToLower()))
+                return (false, "Użytkownik z takim emailem już istnieje.");
+            return (true, "");
         }
     }
 }
