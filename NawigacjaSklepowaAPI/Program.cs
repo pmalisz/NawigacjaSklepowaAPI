@@ -6,9 +6,9 @@ using NawigacjaSklepowaAPI.Models;
 using NawigacjaSklepowaAPI.Authentication;
 using NawigacjaSklepowaAPI.Authentication.Interfaces;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,17 +16,37 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
 {
-    opt.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
         Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
     });
 
-    opt.OperationFilter<SecurityRequirementsOperationFilter>();
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                   Type = ReferenceType.SecurityScheme,
+                   Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
-builder.Services.AddAuthentication().AddJwtBearer(opt =>
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(opt =>
 {
     opt.TokenValidationParameters = new TokenValidationParameters
     {
@@ -36,6 +56,8 @@ builder.Services.AddAuthentication().AddJwtBearer(opt =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:SecretKey").Value!))
     };
 });
+builder.Services.AddAuthorization();
+
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddDbContext<DataContext>(options =>
@@ -55,6 +77,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

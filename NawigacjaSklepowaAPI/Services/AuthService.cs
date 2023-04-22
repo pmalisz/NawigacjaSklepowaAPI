@@ -35,6 +35,9 @@ namespace NawigacjaSklepowaAPI.Services
             User user = _mapper.Map<User>(request);
             user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
+            //TODO: jak będzie już gotowa rejestracja sklepu dostosować role
+            user.RoleId = _context.Roles.Single(r => r.ClaimName == Identity.ClientUserClaimName).Id;
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return (true, "");
@@ -42,7 +45,7 @@ namespace NawigacjaSklepowaAPI.Services
 
         public async Task<User?> Login(UserLoginDto request)
         {
-            var user = await _context.Users.Where(u => u.Email == request.Email).SingleOrDefaultAsync();
+            var user = await _context.Users.Where(u => u.Email == request.Email).Include(u => u.Role).SingleOrDefaultAsync();
             if (user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
                 return null;
 

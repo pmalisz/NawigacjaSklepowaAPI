@@ -19,8 +19,9 @@ namespace NawigacjaSklepowaAPI.Authentication
         public string Generate(User user)
         {
             var claims = new Claim[] {
-                new Claim(ClaimTypes.Sid, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim("userid", user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(user.Role.ClaimName, "true")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:SecretKey").Value!));
