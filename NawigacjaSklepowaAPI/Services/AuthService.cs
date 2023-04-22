@@ -24,11 +24,11 @@ namespace NawigacjaSklepowaAPI.Services
             bool success;
             string message;
 
-            (success, message) = checkPassword(request);
+            (success, message) = CheckPassword(request);
             if(!success)
                 return (false, message);
 
-            (success, message) = checkEmail(request);
+            (success, message) = CheckEmail(request);
             if (!success)
                 return (false, message);
             
@@ -52,7 +52,7 @@ namespace NawigacjaSklepowaAPI.Services
             return user;
         }
 
-        private (bool, string) checkPassword(UserRegistrationDto request)
+        private (bool, string) CheckPassword(UserRegistrationDto request)
         {
             // Check if password is strong enough
             var min_chars = 8;
@@ -80,7 +80,7 @@ namespace NawigacjaSklepowaAPI.Services
             return (true, "");
         }
 
-        private (bool, string) checkEmail(UserRegistrationDto request)
+        private (bool, string) CheckEmail(UserRegistrationDto request)
         {
             // Check if email address is correct
             bool isValid = new EmailAddressAttribute().IsValid(request.Email);
