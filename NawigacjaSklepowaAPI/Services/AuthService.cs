@@ -24,11 +24,11 @@ namespace NawigacjaSklepowaAPI.Services
             bool success;
             string message;
 
-            (success, message) = CheckPassword(request);
-            if(!success)
+            (success, message) = CheckPassword(request.Password, request.ConfirmPassword);
+            if (!success)
                 return (false, message);
 
-            (success, message) = CheckEmail(request);
+            (success, message) = CheckEmail(request.Email);
             if (!success)
                 return (false, message);
             
@@ -52,43 +52,43 @@ namespace NawigacjaSklepowaAPI.Services
             return user;
         }
 
-        private (bool, string) CheckPassword(UserRegistrationDto request)
+        private (bool, string) CheckPassword(string Password, string ConfirmPassword)
         {
             // Check if password is strong enough
             var min_chars = 8;
             var max_chars = 32;
 
-            if (request.Password.Length < min_chars)
+            if (Password.Length < min_chars)
                 return (false, $"Hasło musi mieć co najmniej {min_chars} znaków.");
 
-            if (request.Password.Length > max_chars)
+            if (Password.Length > max_chars)
                 return (false, $"Hasło może mieć maksymalnie {max_chars} znaki.");
 
-            if (!request.Password.Any(char.IsUpper))
+            if (!Password.Any(char.IsUpper))
                 return (false, "Hasło musi zawierać co najmniej jedną wielką literę.");
 
-            if (!request.Password.Any(char.IsLower))
+            if (!Password.Any(char.IsLower))
                 return (false, "Hasło musi zawierać co najmniej jedną małą literę.");
 
-            if (!request.Password.Any(char.IsDigit))
+            if (!Password.Any(char.IsDigit))
                 return (false, "Hasło musi zawierać co najmniej jedną cyfrę.");
 
             // Check if passwords match
-            if (request.Password != request.ConfirmPassword)
+            if (Password != ConfirmPassword)
                 return (false, "Hasła nie są takie same.");
 
             return (true, "");
         }
 
-        private (bool, string) CheckEmail(UserRegistrationDto request)
+        private (bool, string) CheckEmail(string Email)
         {
             // Check if email address is correct
-            bool isValid = new EmailAddressAttribute().IsValid(request.Email);
+            bool isValid = new EmailAddressAttribute().IsValid(Email);
             if (!isValid)
                 return (false, "Niepoprawny adres email.");
 
             // Check if user with given email already exists
-            if (_context.Users.Any(u => u.Email.ToLower() == request.Email.ToLower()))
+            if (_context.Users.Any(u => u.Email.ToLower() == Email.ToLower()))
                 return (false, "Użytkownik z takim emailem już istnieje.");
             return (true, "");
         }
