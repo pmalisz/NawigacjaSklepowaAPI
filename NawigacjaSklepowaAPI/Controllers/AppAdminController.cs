@@ -16,12 +16,22 @@ namespace NawigacjaSklepowaAPI.Controllers
         }
 
         [HttpPost("createShop")]
-        public async Task<IActionResult> Register(Shop request)
+        public async Task<IActionResult> CreateShop(Shop request)
         {
             var result = await _appAdminService.CreateShop(request);
             if(!result.result)
                 return BadRequest(result.Message);
             
+            return Ok();
+        }
+
+        [HttpPost("createCompany")]
+        public async Task<IActionResult> CreateCompany(Company request)
+        {
+            var result = await _appAdminService.CreateCompany(request);
+            if (!result.result)
+                return BadRequest(result.Message);
+
             return Ok();
         }
 
