@@ -13,12 +13,12 @@ namespace NawigacjaSklepowaAPI.Services
             _context = context;
         }
 
-        public async Task<List<User>> GetAll() 
+        public async Task<List<User>> GetAll()
         {
             return await _context.Users.ToListAsync();
         }
-        public async Task<User?> GetById(int id) 
-        {  
+        public async Task<User?> GetById(int id)
+        {
             return await _context.Users.FindAsync(id);
         }
     }

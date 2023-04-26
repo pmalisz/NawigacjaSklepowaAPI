@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using NawigacjaSklepowaAPI.Data;
 using NawigacjaSklepowaAPI.Data.Entities;
+using NawigacjaSklepowaAPI.Helpers.Validators;
 using NawigacjaSklepowaAPI.Models.Auth;
 using NawigacjaSklepowaAPI.Services.Interfaces;
-using System.ComponentModel.DataAnnotations;
 
 namespace NawigacjaSklepowaAPI.Services
 {
@@ -31,7 +31,7 @@ namespace NawigacjaSklepowaAPI.Services
             (success, message) = CheckEmail(request.Email);
             if (!success)
                 return (false, message);
-            
+
             User user = _mapper.Map<User>(request);
             user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
@@ -82,14 +82,18 @@ namespace NawigacjaSklepowaAPI.Services
 
         private (bool, string) CheckEmail(string Email)
         {
-            // Check if email address is correct
-            bool isValid = new EmailAddressAttribute().IsValid(Email);
+            bool isValid;
+            string message;
+
+            // Check if email is valid
+            (isValid, message) = MyValidators.CheckEmail(Email);
             if (!isValid)
-                return (false, "Niepoprawny adres email.");
+                return (false, message);
 
             // Check if user with given email already exists
             if (_context.Users.Any(u => u.Email.ToLower() == Email.ToLower()))
                 return (false, "Użytkownik z takim emailem już istnieje.");
+
             return (true, "");
         }
     }

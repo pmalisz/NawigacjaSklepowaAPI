@@ -1,4 +1,4 @@
-﻿    namespace NawigacjaSklepowaAPI.Models.Auth
+﻿namespace NawigacjaSklepowaAPI.Models.Auth
 {
     public class UserLoginDto
     {

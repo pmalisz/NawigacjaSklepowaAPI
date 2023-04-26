@@ -6,9 +6,11 @@ namespace NawigacjaSklepowaAPI.Models
 {
     public class MappingProfile : Profile
     {
-        public MappingProfile() 
+        public MappingProfile()
         {
             CreateMap<User, UserRegistrationDto>().ReverseMap();
+            CreateMap<Shop, ShopCreationDto>().ReverseMap();
+            CreateMap<Product, ProductCreationDto>().ReverseMap();
         }
     }
 }

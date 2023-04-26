@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NawigacjaSklepowaAPI.Services.Interfaces;
 using NawigacjaSklepowaAPI.Attributes;
 using NawigacjaSklepowaAPI.Data;
+using NawigacjaSklepowaAPI.Services.Interfaces;
 
 namespace NawigacjaSklepowaAPI.Controllers
 {

@@ -1,14 +1,14 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using NawigacjaSklepowaAPI.Data;
-using NawigacjaSklepowaAPI.Services;
-using NawigacjaSklepowaAPI.Services.Interfaces;
-using NawigacjaSklepowaAPI.Models;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using NawigacjaSklepowaAPI.Authentication;
 using NawigacjaSklepowaAPI.Authentication.Interfaces;
-using Microsoft.OpenApi.Models;
-using Microsoft.IdentityModel.Tokens;
+using NawigacjaSklepowaAPI.Data;
+using NawigacjaSklepowaAPI.Models;
+using NawigacjaSklepowaAPI.Services;
+using NawigacjaSklepowaAPI.Services.Interfaces;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 

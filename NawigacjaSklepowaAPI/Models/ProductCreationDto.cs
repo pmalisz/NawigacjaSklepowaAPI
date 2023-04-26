@@ -1,6 +1,6 @@
-namespace NawigacjaSklepowaAPI.Data.Entities
+namespace NawigacjaSklepowaAPI.Models
 {
-    public class Product : BaseEntity
+    public class ProductCreationDto
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -9,6 +9,5 @@ namespace NawigacjaSklepowaAPI.Data.Entities
         public int Alley { get; set; }
         public int Floor { get; set; }
         public int ShopId { get; set; }
-        public Shop Shop { get; set; }
     }
 }

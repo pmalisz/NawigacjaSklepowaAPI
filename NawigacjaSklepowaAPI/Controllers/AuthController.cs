@@ -11,7 +11,7 @@ namespace NawigacjaSklepowaAPI.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IJwtProvider _jwtProvider;
-        
+
         public AuthController(IAuthService authService, IJwtProvider jwtProvider)
         {
             _authService = authService;
@@ -24,9 +24,9 @@ namespace NawigacjaSklepowaAPI.Controllers
         public async Task<IActionResult> Register(UserRegistrationDto request)
         {
             var result = await _authService.Register(request);
-            if(!result.IsUserRegistered)
+            if (!result.IsUserRegistered)
                 return BadRequest(result.Message);
-            
+
             return Ok();
         }
 

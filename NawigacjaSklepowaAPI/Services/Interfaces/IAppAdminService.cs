@@ -1,11 +1,10 @@
-﻿using NawigacjaSklepowaAPI.Data.Entities;
-using NawigacjaSklepowaAPI.Models.Auth;
+﻿using NawigacjaSklepowaAPI.Models;
 
 namespace NawigacjaSklepowaAPI.Services.Interfaces
 {
     public interface IAppAdminService
     {
-        Task<(bool result, string Message)> CreateShop(Shop request);
-        Task<(bool result, string Message)> CreateCompany(Company request);
+        Task<(bool result, string Message)> CreateShop(ShopCreationDto request);
+        Task<(bool result, string Message)> CreateProduct(ProductCreationDto request);
     }
 }

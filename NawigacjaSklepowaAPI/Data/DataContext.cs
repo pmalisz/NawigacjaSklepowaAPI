@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NawigacjaSklepowaAPI.Data.Entities;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.IO;
-using System.Threading.Channels;
-using System.Threading;
 
 namespace NawigacjaSklepowaAPI.Data
 {
@@ -15,7 +11,8 @@ namespace NawigacjaSklepowaAPI.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Shop> Shops { get; set; }
-        public DbSet<Company> Companies { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +24,23 @@ namespace NawigacjaSklepowaAPI.Data
                 new Role { Id = 4, ClaimName = Identity.ShopAdminUserClaimName },
                 new Role { Id = 5, ClaimName = Identity.AppAdminUserClaimName }
             );
+            modelBuilder.Entity<Shop>()
+                .HasMany(p => p.Users)
+                .WithMany(p => p.Shops)
+                .UsingEntity<ShopUser>(
+                    j => j
+                        .HasOne(pt => pt.User)
+                        .WithMany(t => t.ShopUsers)
+                        .HasForeignKey(pt => pt.UserId),
+                    j => j
+                        .HasOne(pt => pt.Shop)
+                        .WithMany(p => p.ShopUsers)
+                        .HasForeignKey(pt => pt.ShopId),
+                    j =>
+                    {
+                        j.HasKey(t => new { t.ShopId, t.UserId });
+                    }
+                );
         }
     }
 }

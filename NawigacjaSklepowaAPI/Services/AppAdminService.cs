@@ -1,14 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using NawigacjaSklepowaAPI.Data;
 using NawigacjaSklepowaAPI.Data.Entities;
-using NawigacjaSklepowaAPI.Models.Auth;
-using NawigacjaSklepowaAPI.Services.Interfaces;
 using NawigacjaSklepowaAPI.Helpers.Validators;
-using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using NawigacjaSklepowaAPI.Models;
+using NawigacjaSklepowaAPI.Services.Interfaces;
 
 namespace NawigacjaSklepowaAPI.Services
 {
@@ -23,7 +18,7 @@ namespace NawigacjaSklepowaAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<(bool result, string Message)> CreateShop(Shop shopRequest)
+        public async Task<(bool result, string Message)> CreateShop(ShopCreationDto shopRequest)
         {
             bool success;
             string message;
@@ -32,69 +27,63 @@ namespace NawigacjaSklepowaAPI.Services
             if (!success)
                 return (false, message);
 
-            _context.Shops.Add(shopRequest);
+            if (_context.Shops.Any(
+                s => s.Name.ToLower() == shopRequest.Name.ToLower() &&
+                s.Address.ToLower() == shopRequest.Address.ToLower() &&
+                s.City.ToLower() == shopRequest.City.ToLower())
+            )
+            {
+                return (false, "Ten sklep już istnieje");
+            }
+
+            Shop shop = _mapper.Map<Shop>(shopRequest);
+
+            _context.Shops.Add(shop);
+            await _context.SaveChangesAsync();
+
+            return (true, "");
+        }
+
+        public async Task<(bool result, string Message)> CreateProduct(ProductCreationDto productRequest)
+        {
+            Product product = _mapper.Map<Product>(productRequest);
+
+            if(!_context.Shops.Any(s => s.Id == product.ShopId))
+            {
+                return (false, "Nie ma takiego sklepu");
+            }
+
+            if (_context.Products.Any(
+                p => p.Name.ToLower() == product.Name.ToLower() &&
+                p.ShopId == product.ShopId)
+            )
+            {
+                return (false, "Ten produkt już istnieje w tym sklepie");
+            }
+
+            _context.Products.Add(product);
             await _context.SaveChangesAsync();
             return (true, "");
         }
 
-        private (bool, string) CheckShop(Shop shop)
+        private static (bool, string) CheckShop(ShopCreationDto shop)
         {
-            bool postalCodeOk;
+            bool isValid;
             string message;
-            (postalCodeOk, message) = MyValidators.checkPostalCode(shop.PostalCode);
-            if (!postalCodeOk)
-            {
+
+            (isValid, message) = MyValidators.CheckPostalCode(shop.PostalCode);
+            if (!isValid)
                 return (false, message);
-            }
-            if (!_context.Companies.Any(u => u.Id == shop.CompanyId))
-            {
-                return (false, "Firma o danym id nie istnieje.");
-            }
+
+            (isValid, message) = MyValidators.CheckEmail(shop.Email);
+            if (!isValid)
+                return (false, message);
+
+            (isValid, message) = MyValidators.CheckPhoneNumber(shop.Phone);
+            if (!isValid)
+                return (false, message);
 
             return (true, "");
         }
-
-        public async Task<(bool result, string Message)> CreateCompany(Company companyRequest)
-        {
-            bool success;
-            string message;
-
-            (success, message) = CheckCompany(companyRequest);
-            if (!success)
-                return (false, message);
-
-            _context.Companies.Add(companyRequest);
-            await _context.SaveChangesAsync();
-            return (true, "");
-        }
-
-        private (bool, string) CheckCompany(Company company)
-        {
-            bool phoneOk;
-            string message;
-            (phoneOk, message) = MyValidators.checkPhoneNumber(company.Phone);
-            if (!phoneOk)
-            {
-                return (false, message);
-            }
-            bool postalCodeOk;
-            (postalCodeOk, message) = MyValidators.checkPostalCode(company.PostalCode);
-            if (!postalCodeOk)
-            {
-                return (false, message);
-            }
-            if(!(new EmailAddressAttribute().IsValid(company.Email)))
-            {
-                return (false, "Niepoprawny adres email.");
-            }
-            if (_context.Companies.Any(u => u.Email.ToLower() == company.Email.ToLower()))
-            {
-                return (false, "Firma z takim emailem już istnieje.");
-            }
-                
-
-            return (true, "");
-        }
-
     }
 }
