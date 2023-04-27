@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using NawigacjaSklepowaAPI.Authentication.Interfaces;
 using NawigacjaSklepowaAPI.Models.Auth;
 using NawigacjaSklepowaAPI.Services.Interfaces;
@@ -21,6 +22,8 @@ namespace NawigacjaSklepowaAPI.Controllers
 
         //TODO: przerobić rejestracje tak, żeby była możliwa też rejestracja sklepu
         [HttpPost("register")]
+        [EnableCors("Localhost")]
+
         public async Task<IActionResult> Register(UserRegistrationDto request)
         {
             var result = await _authService.Register(request);
