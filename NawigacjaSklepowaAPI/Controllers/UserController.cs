@@ -26,6 +26,7 @@ namespace NawigacjaSklepowaAPI.Controllers
         }
 
         [Authorize]
+        [RequiresClaim(Identity.AppAdminUserClaimName, "true")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {

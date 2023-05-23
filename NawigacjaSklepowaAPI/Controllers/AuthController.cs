@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using NawigacjaSklepowaAPI.Attributes;
 using NawigacjaSklepowaAPI.Authentication.Interfaces;
+using NawigacjaSklepowaAPI.Data;
 using NawigacjaSklepowaAPI.Models.Auth;
 using NawigacjaSklepowaAPI.Services.Interfaces;
 
@@ -23,7 +26,6 @@ namespace NawigacjaSklepowaAPI.Controllers
         //TODO: przerobić rejestracje tak, żeby była możliwa też rejestracja sklepu
         [HttpPost("register")]
         [EnableCors("Localhost")]
-
         public async Task<IActionResult> Register(UserRegistrationDto request)
         {
             var result = await _authService.Register(request);
@@ -43,6 +45,18 @@ namespace NawigacjaSklepowaAPI.Controllers
             string token = _jwtProvider.Generate(user);
 
             return Ok(token);
+        }
+
+        [HttpPost("deleteAccount")]
+        public async Task<IActionResult> DeleteAccount(AccountDeletionDto request)
+        {
+            bool isSuccess;
+            string message;
+            (isSuccess, message) = await _authService.DeleteAccount(request);
+            if (!isSuccess)
+                return BadRequest(message);
+
+            return Ok();
         }
     }
 }

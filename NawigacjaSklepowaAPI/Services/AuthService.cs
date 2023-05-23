@@ -52,6 +52,20 @@ namespace NawigacjaSklepowaAPI.Services
             return user;
         }
 
+        public async Task<(bool IsSuccess, string Message)> DeleteAccount(AccountDeletionDto request)
+        {
+            User user = _mapper.Map<User>(request);
+
+            if(user.Password is null)
+            {
+                return (false, "Nie istnieje użytkownik o takim Id");
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return (true, "");
+        }
+
         private (bool, string) CheckPassword(string Password, string ConfirmPassword)
         {
             // Check if password is strong enough

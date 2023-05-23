@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using NawigacjaSklepowaAPI.Attributes;
+using NawigacjaSklepowaAPI.Data;
 using NawigacjaSklepowaAPI.Models;
 using NawigacjaSklepowaAPI.Services.Interfaces;
 
@@ -15,6 +18,8 @@ namespace NawigacjaSklepowaAPI.Controllers
             _appAdminService = authService;
         }
 
+        [Authorize]
+        [RequiresClaim(Identity.AppAdminUserClaimName, "true")]
         [HttpPost("createShop")]
         public async Task<IActionResult> CreateShop(ShopCreationDto request)
         {
@@ -25,6 +30,8 @@ namespace NawigacjaSklepowaAPI.Controllers
             return Ok();
         }
 
+        [Authorize]
+        [RequiresClaim(Identity.AppAdminUserClaimName, "true")]
         [HttpPost("createProduct")]
         public async Task<IActionResult> CreateProduct(ProductCreationDto request)
         {
