@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NawigacjaSklepowaAPI", "NawigacjaSklepowaAPI\NawigacjaSklepowaAPI.csproj", "{BA0AE9BC-1FB6-462C-B9DF-60083493F69C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NawigacjaSklepowaAPI", "NawigacjaSklepowaAPI\NawigacjaSklepowaAPI.csproj", "{BA0AE9BC-1FB6-462C-B9DF-60083493F69C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NawigacjaSklepowaTest", "NawigacjaSklepowaTest\NawigacjaSklepowaTest.csproj", "{17D8F7D8-E310-490B-BF19-084ABB8C117E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{BA0AE9BC-1FB6-462C-B9DF-60083493F69C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA0AE9BC-1FB6-462C-B9DF-60083493F69C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA0AE9BC-1FB6-462C-B9DF-60083493F69C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17D8F7D8-E310-490B-BF19-084ABB8C117E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17D8F7D8-E310-490B-BF19-084ABB8C117E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17D8F7D8-E310-490B-BF19-084ABB8C117E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17D8F7D8-E310-490B-BF19-084ABB8C117E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
