@@ -5,7 +5,7 @@ namespace NawigacjaSklepowaAPI.Data.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
-        public int Price { get; set; }
+        public float Price { get; set; }
         public int Floor { get; set; }
         public string Shelves { get; set; }
         public int ShopId { get; set; }
