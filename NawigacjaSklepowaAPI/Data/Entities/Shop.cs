@@ -10,6 +10,7 @@ namespace NawigacjaSklepowaAPI.Data.Entities
         public string Email { get; set; }
         public string Phone { get; set; }
         public ICollection<User> Users { get; set; }
-        public List<ShopUser> ShopUsers { get; set; }
+        public ICollection<Product> Products { get; set; }
+        public Layout Layout { get; set; }
     }
 }

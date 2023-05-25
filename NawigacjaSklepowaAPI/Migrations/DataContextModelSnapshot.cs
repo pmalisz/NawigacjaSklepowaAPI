@@ -21,7 +21,7 @@ namespace NawigacjaSklepowaAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("NawigacjaSklepowaAPI.Data.Entities.Product", b =>
+            modelBuilder.Entity("NawigacjaSklepowaAPI.Data.Entities.Layout", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,8 +29,28 @@ namespace NawigacjaSklepowaAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Alley")
+                    b.Property<string>("Canvas")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ShopId")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShopId")
+                        .IsUnique();
+
+                    b.ToTable("Layouts");
+                });
+
+            modelBuilder.Entity("NawigacjaSklepowaAPI.Data.Entities.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -49,6 +69,10 @@ namespace NawigacjaSklepowaAPI.Migrations
 
                     b.Property<int>("Price")
                         .HasColumnType("int");
+
+                    b.Property<string>("Shelves")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ShopId")
                         .HasColumnType("int");
@@ -145,24 +169,6 @@ namespace NawigacjaSklepowaAPI.Migrations
                     b.ToTable("Shops");
                 });
 
-            modelBuilder.Entity("NawigacjaSklepowaAPI.Data.Entities.ShopUser", b =>
-                {
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("ShopId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ShopUser");
-                });
-
             modelBuilder.Entity("NawigacjaSklepowaAPI.Data.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -190,41 +196,38 @@ namespace NawigacjaSklepowaAPI.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ShopId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
+                    b.HasIndex("ShopId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("NawigacjaSklepowaAPI.Data.Entities.Layout", b =>
+                {
+                    b.HasOne("NawigacjaSklepowaAPI.Data.Entities.Shop", "Shop")
+                        .WithOne("Layout")
+                        .HasForeignKey("NawigacjaSklepowaAPI.Data.Entities.Layout", "ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Shop");
                 });
 
             modelBuilder.Entity("NawigacjaSklepowaAPI.Data.Entities.Product", b =>
                 {
                     b.HasOne("NawigacjaSklepowaAPI.Data.Entities.Shop", "Shop")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("ShopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Shop");
-                });
-
-            modelBuilder.Entity("NawigacjaSklepowaAPI.Data.Entities.ShopUser", b =>
-                {
-                    b.HasOne("NawigacjaSklepowaAPI.Data.Entities.Shop", "Shop")
-                        .WithMany("ShopUsers")
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NawigacjaSklepowaAPI.Data.Entities.User", "User")
-                        .WithMany("ShopUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Shop");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NawigacjaSklepowaAPI.Data.Entities.User", b =>
@@ -235,17 +238,25 @@ namespace NawigacjaSklepowaAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("NawigacjaSklepowaAPI.Data.Entities.Shop", "Shop")
+                        .WithMany("Users")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Role");
+
+                    b.Navigation("Shop");
                 });
 
             modelBuilder.Entity("NawigacjaSklepowaAPI.Data.Entities.Shop", b =>
                 {
-                    b.Navigation("ShopUsers");
-                });
+                    b.Navigation("Layout")
+                        .IsRequired();
 
-            modelBuilder.Entity("NawigacjaSklepowaAPI.Data.Entities.User", b =>
-                {
-                    b.Navigation("ShopUsers");
+                    b.Navigation("Products");
+
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

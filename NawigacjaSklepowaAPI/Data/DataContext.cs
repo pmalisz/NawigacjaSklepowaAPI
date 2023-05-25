@@ -6,14 +6,11 @@ namespace NawigacjaSklepowaAPI.Data
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-
-        public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Layout> Layouts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Shop> Shops { get; set; }
-
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -24,23 +21,7 @@ namespace NawigacjaSklepowaAPI.Data
                 new Role { Id = 4, ClaimName = Identity.ShopAdminUserClaimName },
                 new Role { Id = 5, ClaimName = Identity.AppAdminUserClaimName }
             );
-            modelBuilder.Entity<Shop>()
-                .HasMany(p => p.Users)
-                .WithMany(p => p.Shops)
-                .UsingEntity<ShopUser>(
-                    j => j
-                        .HasOne(pt => pt.User)
-                        .WithMany(t => t.ShopUsers)
-                        .HasForeignKey(pt => pt.UserId),
-                    j => j
-                        .HasOne(pt => pt.Shop)
-                        .WithMany(p => p.ShopUsers)
-                        .HasForeignKey(pt => pt.ShopId),
-                    j =>
-                    {
-                        j.HasKey(t => new { t.ShopId, t.UserId });
-                    }
-                );
+
         }
     }
 }
