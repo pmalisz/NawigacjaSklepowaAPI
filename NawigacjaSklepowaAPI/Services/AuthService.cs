@@ -66,7 +66,7 @@ namespace NawigacjaSklepowaAPI.Services
             return (true, "");
         }
 
-        private (bool, string) CheckPassword(string Password, string ConfirmPassword)
+        public static (bool, string) CheckPassword(string Password, string ConfirmPassword)
         {
             // Check if password is strong enough
             var min_chars = 8;
