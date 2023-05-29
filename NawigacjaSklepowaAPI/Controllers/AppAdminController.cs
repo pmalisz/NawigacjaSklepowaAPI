@@ -29,17 +29,5 @@ namespace NawigacjaSklepowaAPI.Controllers
 
             return Ok();
         }
-
-        [Authorize]
-        [RequiresClaim(Identity.AppAdminUserClaimName, "true")]
-        [HttpPost("createProduct")]
-        public async Task<IActionResult> CreateProduct(ProductCreationDto request)
-        {
-            var result = await _appAdminService.CreateProduct(request);
-            if (!result.result)
-                return BadRequest(result.Message);
-
-            return Ok();
-        }
     }
 }

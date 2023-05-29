@@ -3,6 +3,7 @@ using NawigacjaSklepowaAPI.Data;
 using NawigacjaSklepowaAPI.Data.Entities;
 using NawigacjaSklepowaAPI.Helpers.Validators;
 using NawigacjaSklepowaAPI.Models;
+using NawigacjaSklepowaAPI.Models.Products;
 using NawigacjaSklepowaAPI.Services.Interfaces;
 
 namespace NawigacjaSklepowaAPI.Services

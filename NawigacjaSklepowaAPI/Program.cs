@@ -79,7 +79,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddScoped<IJwtProvider, JwtProvider>()
     .AddScoped<IUserService, UserService>()
     .AddScoped<IAuthService, AuthService>()
-    .AddScoped<IAppAdminService, AppAdminService>();
+    .AddScoped<IAppAdminService, AppAdminService>()
+    .AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 

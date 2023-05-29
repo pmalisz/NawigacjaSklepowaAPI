@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using NawigacjaSklepowaAPI.Data.Entities;
 using NawigacjaSklepowaAPI.Models.Auth;
+using NawigacjaSklepowaAPI.Models.Products;
 
 namespace NawigacjaSklepowaAPI.Models
 {
@@ -11,7 +12,7 @@ namespace NawigacjaSklepowaAPI.Models
             CreateMap<User, UserRegistrationDto>().ReverseMap();
             CreateMap<User, AccountDeletionDto>().ReverseMap();
             CreateMap<Shop, ShopCreationDto>().ReverseMap();
-            CreateMap<Product, ProductCreationDto>().ReverseMap();
+            CreateMap<Data.Entities.Product, ProductCreationDto>().ReverseMap();
         }
     }
 }
