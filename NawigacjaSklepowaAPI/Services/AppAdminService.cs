@@ -45,28 +45,6 @@ namespace NawigacjaSklepowaAPI.Services
             return (true, "");
         }
 
-        public async Task<(bool result, string Message)> CreateProduct(ProductCreationDto productRequest)
-        {
-            Product product = _mapper.Map<Product>(productRequest);
-
-            if(!_context.Shops.Any(s => s.Id == product.ShopId))
-            {
-                return (false, "Nie ma takiego sklepu");
-            }
-
-            if (_context.Products.Any(
-                p => p.Name.ToLower() == product.Name.ToLower() &&
-                p.ShopId == product.ShopId)
-            )
-            {
-                return (false, "Ten produkt już istnieje w tym sklepie");
-            }
-
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-            return (true, "");
-        }
-
         private static (bool, string) CheckShop(ShopCreationDto shop)
         {
             bool isValid;

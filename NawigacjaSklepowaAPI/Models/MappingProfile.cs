@@ -12,7 +12,8 @@ namespace NawigacjaSklepowaAPI.Models
             CreateMap<User, UserRegistrationDto>().ReverseMap();
             CreateMap<User, AccountDeletionDto>().ReverseMap();
             CreateMap<Shop, ShopCreationDto>().ReverseMap();
-            CreateMap<Data.Entities.Product, ProductCreationDto>().ReverseMap();
+            CreateMap<Product, ProductCreationDto>().ReverseMap();
+            CreateMap<Product, ProductDeletionDto>().ReverseMap();
         }
     }
 }

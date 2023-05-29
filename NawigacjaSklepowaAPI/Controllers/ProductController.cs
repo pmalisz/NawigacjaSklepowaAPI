@@ -39,5 +39,15 @@ namespace NawigacjaSklepowaAPI.Controllers
 
             return Ok();
         }
+
+        [HttpPost("deleteProduct")]
+        public async Task<IActionResult> DeleteProduct(ProductDeletionDto request)
+        {
+            var result = await _productService.DeleteProduct(request);
+            if (!result.result)
+                return BadRequest(result.Message);
+
+            return Ok();
+        }
     }
 }

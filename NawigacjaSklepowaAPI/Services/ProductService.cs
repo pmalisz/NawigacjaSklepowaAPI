@@ -46,5 +46,19 @@ namespace NawigacjaSklepowaAPI.Services
             return (true, "");
         }
 
+        public async Task<(bool result, string Message)> DeleteProduct(ProductDeletionDto request)
+        {
+            Product? product = _context.Products.Find(request.Id);
+
+            if (product is null)
+            {
+                return (false, "Nie istnieje produkt o takim Id");
+            }
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return (true, "");
+        }
+
     }
 }
