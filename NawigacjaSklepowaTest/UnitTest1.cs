@@ -2,6 +2,9 @@ using NawigacjaSklepowaAPI;
 using Microsoft.EntityFrameworkCore;
 using NawigacjaSklepowaAPI.Data;
 using NawigacjaSklepowaAPI.Data.Entities;
+using NawigacjaSklepowaAPI.Helpers.Validators;
+using NawigacjaSklepowaAPI.Models;
+using NawigacjaSklepowaAPI.Services;
 
 namespace NawigacjaSklepowaTest;
 
@@ -181,6 +184,71 @@ public class UnitTest1
         {
             Assert.Empty(context.Layouts);
         }
+    }
+
+    [Fact]
+    public void CheckPasswordStrenght()
+    {
+        var password = "Test1234";
+        Assert.True(AuthService.CheckPassword(password, password).Item1);
+        password = "Ab123456";
+        Assert.True(AuthService.CheckPassword(password, password).Item1);
+        password = "0123456789yZ";
+        Assert.True(AuthService.CheckPassword(password, password).Item1);
+
+
+        password = "Ab012345678901234567890123456789012345678901234567890123456789";
+        Assert.False(AuthService.CheckPassword(password, password).Item1);
+        password = "A1234567";
+        Assert.False(AuthService.CheckPassword(password, password).Item1);
+        password = "a1234567";
+        Assert.False(AuthService.CheckPassword(password, password).Item1);
+        password = "AbCdEfGh";
+        Assert.False(AuthService.CheckPassword(password, password).Item1);
+        password = "Ab12345";
+        Assert.False(AuthService.CheckPassword(password, password).Item1);
+        Assert.False(AuthService.CheckPassword("Test1234", "Test4321").Item1);
+        Assert.False(AuthService.CheckPassword("Test1234", "Test12345").Item1);
+    }
+
+    [Fact]
+    public void CheckEmailToBeCorrect()
+    {
+        Assert.True(MyValidators.CheckEmail("test@gmail.com").Item1);
+        Assert.True(MyValidators.CheckEmail("test@wp.pl").Item1);
+        Assert.True(MyValidators.CheckEmail("test@op.pl").Item1);
+
+        
+        Assert.False(MyValidators.CheckEmail("test").Item1);
+        Assert.False(MyValidators.CheckEmail("test@").Item1);
+        Assert.False(MyValidators.CheckEmail("test@.com").Item1);
+        Assert.False(MyValidators.CheckEmail("test@gmail").Item1);
+        Assert.False(MyValidators.CheckEmail("test@gmail.").Item1);
+    }
+
+    [Fact]
+    public void CheckPostalCode()
+    {
+        Assert.True(MyValidators.CheckPostalCode("12-345").Item1);
+        Assert.True(MyValidators.CheckPostalCode("00-000").Item1);
+        
+        Assert.False(MyValidators.CheckPostalCode("12345").Item1);
+        Assert.False(MyValidators.CheckPostalCode("123-45").Item1);
+        Assert.False(MyValidators.CheckPostalCode("12-3456").Item1);
+        Assert.False(MyValidators.CheckPostalCode("12-34").Item1);
+        Assert.False(MyValidators.CheckPostalCode("12-3a5").Item1);
+    }
+
+    [Fact]
+    public void CheckPhoneNumber()
+    {
+        Assert.True(MyValidators.CheckPhoneNumber("123456789").Item1);
+        
+        Assert.False(MyValidators.CheckPhoneNumber("12345678").Item1);
+        Assert.False(MyValidators.CheckPhoneNumber("12345678a").Item1);
+        Assert.False(MyValidators.CheckPhoneNumber("48-123456789").Item1);
+        Assert.False(MyValidators.CheckPhoneNumber("123-456-789").Item1);
+        Assert.False(MyValidators.CheckPhoneNumber("123 456 789").Item1);
     }
 
     private static DbContextOptions<DataContext> GetDbOptions()
