@@ -2,12 +2,12 @@ namespace NawigacjaSklepowaAPI.Models.Products
 {
     public class ProductCreationDto
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Category { get; set; }
-        public int Price { get; set; }
-        public int Alley { get; set; }
-        public int Floor { get; set; }
-        public int ShopId { get; set; }
+        public required string Name { get; set; }
+        public required string Description { get; set; }
+        public required string Category { get; set; }
+        public required float Price { get; set; }
+        public required int Floor { get; set; }
+        public required string Shelves { get; set; }
+        public required int ShopId { get; set; }
     }
 }
