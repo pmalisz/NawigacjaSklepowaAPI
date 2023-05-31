@@ -6,6 +6,7 @@ using NawigacjaSklepowaAPI.Helpers.Validators;
 using NawigacjaSklepowaAPI.Models.Auth;
 using NawigacjaSklepowaAPI.Services.Interfaces;
 
+
 namespace NawigacjaSklepowaAPI.Services
 {
     public class AuthService : IAuthService
@@ -53,9 +54,9 @@ namespace NawigacjaSklepowaAPI.Services
 
         public async Task<(bool IsSuccess, string Message)> DeleteAccount(AccountDeletionDto request)
         {
-            User user = _mapper.Map<User>(request);
+            User? user = _context.Users.Find(request.Id);
 
-            if(user.Password is null)
+            if (user is null)
             {
                 return (false, "Nie istnieje użytkownik o takim Id");
             }

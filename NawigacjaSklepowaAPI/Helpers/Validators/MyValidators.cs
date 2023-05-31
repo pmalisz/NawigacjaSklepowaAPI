@@ -21,5 +21,29 @@ namespace NawigacjaSklepowaAPI.Helpers.Validators
             return (Regex.IsMatch(email, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"),
                                    "Niepoprawny adres email.");
         }
+
+        public static (bool, string) CheckPassword(string Password)
+        {
+            // Check if password is strong enough
+            var min_chars = 8;
+            var max_chars = 32;
+
+            if (Password.Length < min_chars)
+                return (false, $"Hasło musi mieć co najmniej {min_chars} znaków.");
+
+            if (Password.Length > max_chars)
+                return (false, $"Hasło może mieć maksymalnie {max_chars} znaki.");
+
+            if (!Password.Any(char.IsUpper))
+                return (false, "Hasło musi zawierać co najmniej jedną wielką literę.");
+
+            if (!Password.Any(char.IsLower))
+                return (false, "Hasło musi zawierać co najmniej jedną małą literę.");
+
+            if (!Password.Any(char.IsDigit))
+                return (false, "Hasło musi zawierać co najmniej jedną cyfrę.");
+
+            return (true, "");
+        }
     }
 }
