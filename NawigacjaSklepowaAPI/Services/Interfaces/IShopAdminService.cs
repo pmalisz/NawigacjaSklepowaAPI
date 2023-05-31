@@ -5,5 +5,6 @@ namespace NawigacjaSklepowaAPI.Services.Interfaces
     public interface IShopAdminService
     {
         Task<(bool result, string Message)> CreateEmployee(EmployeeCreationDto request);
+        Task<(bool result, string Message)> CreateManager(EmployeeCreationDto request);
     }
 }
