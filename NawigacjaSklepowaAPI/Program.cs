@@ -80,6 +80,7 @@ builder.Services.AddScoped<IJwtProvider, JwtProvider>()
     .AddScoped<IUserService, UserService>()
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<IAppAdminService, AppAdminService>()
+    .AddScoped<IShopService, ShopService>()
     .AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();

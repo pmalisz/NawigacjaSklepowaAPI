@@ -1,4 +1,4 @@
-namespace NawigacjaSklepowaAPI.Models
+namespace NawigacjaSklepowaAPI.Models.Shops
 {
     public class ShopCreationDto
     {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NawigacjaSklepowaAPI.Attributes;
 using NawigacjaSklepowaAPI.Data;
+using NawigacjaSklepowaAPI.Models.Auth;
 using NawigacjaSklepowaAPI.Models.Products;
 using NawigacjaSklepowaAPI.Services;
 using NawigacjaSklepowaAPI.Services.Interfaces;
@@ -19,7 +20,13 @@ namespace NawigacjaSklepowaAPI.Controllers
             _productService = productService;
         }
 
-        
+        [HttpGet("getAll")]
+        public async Task<IActionResult> GetGetAllForShop(int shopId)
+        {
+            var products = await _productService.GetAllForShop(shopId);
+            return Ok(products);
+        }
+
         [HttpPost("findProduct")]
         public async Task<IActionResult> FindProduct(FindingProductDto request)
         {
@@ -29,7 +36,7 @@ namespace NawigacjaSklepowaAPI.Controllers
         }
 
         [Authorize]
-        [RequiresClaim(Identity.AppAdminUserClaimName, "true")]
+        [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
         [HttpPost("createProduct")]
         public async Task<IActionResult> CreateProduct(ProductCreationDto request)
         {
@@ -40,10 +47,24 @@ namespace NawigacjaSklepowaAPI.Controllers
             return Ok();
         }
 
+        [Authorize]
+        [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
         [HttpPost("deleteProduct")]
         public async Task<IActionResult> DeleteProduct(ProductDeletionDto request)
         {
             var result = await _productService.DeleteProduct(request);
+            if (!result.result)
+                return BadRequest(result.Message);
+
+            return Ok();
+        }
+
+        [Authorize]
+        [RequiresClaim(Identity.ClientUserClaimName, "true")]
+        [HttpPost("rateProduct")]
+        public async Task<IActionResult> RateProduct(RateProductDto request)
+        {
+            var result = await _productService.RateProduct(request);
             if (!result.result)
                 return BadRequest(result.Message);
 

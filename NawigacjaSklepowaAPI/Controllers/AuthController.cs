@@ -46,6 +46,7 @@ namespace NawigacjaSklepowaAPI.Controllers
             return Ok(token);
         }
 
+        [Authorize]
         [HttpPost("deleteAccount")]
         public async Task<IActionResult> DeleteAccount(AccountDeletionDto request)
         {

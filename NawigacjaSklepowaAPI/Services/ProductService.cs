@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using NawigacjaSklepowaAPI.Data;
 using NawigacjaSklepowaAPI.Data.Entities;
 using NawigacjaSklepowaAPI.Helpers.Validators;
+using NawigacjaSklepowaAPI.Models.Auth;
 using NawigacjaSklepowaAPI.Models.Products;
 using NawigacjaSklepowaAPI.Services.Interfaces;
 
@@ -17,6 +19,11 @@ namespace NawigacjaSklepowaAPI.Services
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public async Task<List<Product>> GetAllForShop(int shopId)
+        {
+            return await _context.Products.Where(p => p.ShopId == shopId).ToListAsync();
         }
 
         public async Task<List<Product>> FindProduct(FindingProductDto request)
@@ -60,5 +67,18 @@ namespace NawigacjaSklepowaAPI.Services
             return (true, "");
         }
 
+        public async Task<(bool result, string Message)> RateProduct(RateProductDto request)
+        {
+            Product? product = _context.Products.Find(request.Id);
+
+            if (product is null)
+                return (false, "Nie istnieje produkt o takim Id");
+
+            product.RatingCount += 1;
+            product.Rating = request.Rating;
+            await _context.SaveChangesAsync();
+
+            return (true, "");
+        }
     }
 }

@@ -2,6 +2,7 @@
 using NawigacjaSklepowaAPI.Data.Entities;
 using NawigacjaSklepowaAPI.Models.Auth;
 using NawigacjaSklepowaAPI.Models.Products;
+using NawigacjaSklepowaAPI.Models.Shops;
 
 namespace NawigacjaSklepowaAPI.Models
 {
