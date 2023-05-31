@@ -23,7 +23,6 @@ namespace NawigacjaSklepowaAPI.Controllers
         }
 
 
-        //TODO: przerobić rejestracje tak, żeby była możliwa też rejestracja sklepu
         [HttpPost("register")]
         [EnableCors("Localhost")]
         public async Task<IActionResult> Register(UserRegistrationDto request)

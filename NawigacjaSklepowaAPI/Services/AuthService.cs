@@ -24,7 +24,7 @@ namespace NawigacjaSklepowaAPI.Services
             bool success;
             string message;
 
-            (success, message) = CheckPassword(request.Password, request.ConfirmPassword);
+            (success, message) = CheckPassword(request.Password);
             if (!success)
                 return (false, message);
 
@@ -35,8 +35,10 @@ namespace NawigacjaSklepowaAPI.Services
             User user = _mapper.Map<User>(request);
             user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
-            //TODO: jak będzie już gotowa rejestracja sklepu dostosować role
-            user.RoleId = _context.Roles.Single(r => r.ClaimName == Identity.ClientUserClaimName).Id;
+            if(request.ShopOwner)
+                user.RoleId = _context.Roles.Single(r => r.ClaimName == Identity.ShopAdminUserClaimName).Id;
+            else
+                user.RoleId = _context.Roles.Single(r => r.ClaimName == Identity.ClientUserClaimName).Id;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -66,7 +68,7 @@ namespace NawigacjaSklepowaAPI.Services
             return (true, "");
         }
 
-        public static (bool, string) CheckPassword(string Password, string ConfirmPassword)
+        public static (bool, string) CheckPassword(string Password)
         {
             // Check if password is strong enough
             var min_chars = 8;
@@ -86,10 +88,6 @@ namespace NawigacjaSklepowaAPI.Services
 
             if (!Password.Any(char.IsDigit))
                 return (false, "Hasło musi zawierać co najmniej jedną cyfrę.");
-
-            // Check if passwords match
-            if (Password != ConfirmPassword)
-                return (false, "Hasła nie są takie same.");
 
             return (true, "");
         }

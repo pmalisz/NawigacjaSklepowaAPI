@@ -8,6 +8,7 @@ namespace NawigacjaSklepowaAPI.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Employee> Employees { get; set; }
         public DbSet<Layout> Layouts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Shop> Shops { get; set; }

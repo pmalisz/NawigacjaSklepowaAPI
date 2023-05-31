@@ -9,7 +9,7 @@ namespace NawigacjaSklepowaAPI.Data.Entities
         public string Country { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public ICollection<User> Users { get; set; }
+        public ICollection<Employee> Employees { get; set; }
         public ICollection<Product> Products { get; set; }
         public Layout Layout { get; set; }
     }
