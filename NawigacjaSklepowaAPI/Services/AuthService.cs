@@ -66,6 +66,38 @@ namespace NawigacjaSklepowaAPI.Services
             return (true, "");
         }
 
+        public async Task<(bool isSuccess, string Message)> EditUser(UserEditionDto request)
+        {
+            bool success;
+            string message;
+
+            (success, message) = CheckEmail(request.Email);
+            if (!success)
+                return (false, message);
+
+            Role? roleId = _context.Roles.Find(request.RoleId);
+
+            if(roleId is null)
+            {
+                return (false, "Rola o takim Id nie istnieje.");
+            }
+
+            User? user = _context.Users.Find(request.Id);
+
+            if (user is null)
+            {
+                return (false, "Użytkownik o takim Id nie istnieje.");
+            }
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.Email = request.Email;
+            user.RoleId = request.RoleId;
+
+            await _context.SaveChangesAsync();
+            return (true, "");
+        }
+
         public static (bool, string) CheckPassword(string Password)
         {
             // Check if password is strong enough
