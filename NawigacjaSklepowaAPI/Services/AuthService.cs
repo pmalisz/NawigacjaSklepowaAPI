@@ -35,10 +35,7 @@ namespace NawigacjaSklepowaAPI.Services
             User user = _mapper.Map<User>(request);
             user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
-            if(request.ShopOwner)
-                user.RoleId = _context.Roles.Single(r => r.ClaimName == Identity.ShopAdminUserClaimName).Id;
-            else
-                user.RoleId = _context.Roles.Single(r => r.ClaimName == Identity.ClientUserClaimName).Id;
+            user.RoleId = _context.Roles.Single(r => r.ClaimName == Identity.ClientUserClaimName).Id;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

@@ -22,5 +22,14 @@ namespace NawigacjaSklepowaAPI.Services
         {
             return await _context.Users.FindAsync(id);
         }
+
+        public async Task<User> UpdateRole(int userId, string role)
+        {
+            var user = _context.Users.Single(u => u.Id == userId);
+            user.RoleId = _context.Roles.Single(r => r.ClaimName == role).Id;
+            await _context.SaveChangesAsync();
+
+            return user;
+        }
     }
 }

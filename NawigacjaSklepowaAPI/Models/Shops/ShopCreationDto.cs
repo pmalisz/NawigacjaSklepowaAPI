@@ -2,6 +2,7 @@ namespace NawigacjaSklepowaAPI.Models.Shops
 {
     public class ShopCreationDto
     {
+        public int UserId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string PostalCode { get; set; }
