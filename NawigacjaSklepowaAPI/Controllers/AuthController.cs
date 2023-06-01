@@ -58,5 +58,17 @@ namespace NawigacjaSklepowaAPI.Controllers
 
             return Ok();
         }
+
+        [Authorize]
+        [RequiresClaim(Identity.AppAdminUserClaimName, "true")]
+        [HttpPost("editUser")]
+        public async Task<IActionResult> EditUser(UserEditionDto request)
+        {
+            var result = await _authService.EditUser(request);
+            if (!result.isSuccess)
+                return BadRequest(result.Message);
+
+            return Ok();
+        }
     }
 }

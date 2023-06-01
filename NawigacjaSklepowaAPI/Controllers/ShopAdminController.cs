@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NawigacjaSklepowaAPI.Attributes;
 using NawigacjaSklepowaAPI.Data;
+using NawigacjaSklepowaAPI.Models.Auth;
 using NawigacjaSklepowaAPI.Models.Employees;
 using NawigacjaSklepowaAPI.Models.Products;
 using NawigacjaSklepowaAPI.Services;
@@ -23,9 +24,33 @@ namespace NawigacjaSklepowaAPI.Controllers
         [Authorize]
         [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
         [HttpPost("createEmployee")]
-        public async Task<IActionResult> CreateProduct(EmployeeCreationDto request)
+        public async Task<IActionResult> CreateEmployee(EmployeeCreationDto request)
         {
             var result = await _shopAdminService.CreateEmployee(request);
+            if (!result.result)
+                return BadRequest(result.Message);
+
+            return Ok();
+        }
+
+        [Authorize]
+        [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
+        [HttpPost("createManager")]
+        public async Task<IActionResult> CreateManager(EmployeeCreationDto request)
+        {
+            var result = await _shopAdminService.CreateManager(request);
+            if (!result.result)
+                return BadRequest(result.Message);
+
+            return Ok();
+        }
+
+        [Authorize]
+        [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
+        [HttpPost("deleteEmployee")]
+        public async Task<IActionResult> deleteEmployee(AccountDeletionDto request)
+        {
+            var result = await _shopAdminService.DeleteEmployee(request);
             if (!result.result)
                 return BadRequest(result.Message);
 
