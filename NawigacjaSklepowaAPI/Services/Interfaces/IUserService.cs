@@ -7,5 +7,6 @@ namespace NawigacjaSklepowaAPI.Services.Interfaces
         Task<List<User>> GetAll();
         Task<User?> GetById(int id);
         Task<User> UpdateRole(int id, string role);
+        Task<bool> IsEmployee(int userId);
     }
 }

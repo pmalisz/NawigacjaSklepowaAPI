@@ -26,15 +26,33 @@ namespace NawigacjaSklepowaAPI.Controllers
             _jwtProvider = jwtProvider;
         }
 
-        [Authorize]
         [HttpGet]
+        public async Task<IActionResult> GetAsync()
+        {
+            var shops = await _shopService.GetAll();
+            return Ok(new { shops });
+        }
+
+        [Authorize]
+        [HttpGet("getByUserId")]
+        public async Task<IActionResult> GetByUserId(int userId)
+        {
+            var shop = await _shopService.GetByUserId(userId);
+            if (shop is null)
+                return NotFound("Nie znaleziono sklepu");
+
+            return Ok(new { shop });
+        }
+
+        [Authorize]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {
             var shop = await _shopService.Get(id);
             if (shop is null)
                 return NotFound("Nie znaleziono sklepu");
 
-            return Ok(shop);
+            return Ok(new { shop });
         }
 
         [Authorize]

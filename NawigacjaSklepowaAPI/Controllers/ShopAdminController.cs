@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NawigacjaSklepowaAPI.Attributes;
 using NawigacjaSklepowaAPI.Data;
@@ -24,6 +25,7 @@ namespace NawigacjaSklepowaAPI.Controllers
         [Authorize]
         [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
         [HttpPost("createEmployee")]
+        [EnableCors("Localhost")]
         public async Task<IActionResult> CreateEmployee(EmployeeCreationDto request)
         {
             var result = await _shopAdminService.CreateEmployee(request);
@@ -48,7 +50,7 @@ namespace NawigacjaSklepowaAPI.Controllers
         [Authorize]
         [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
         [HttpPost("deleteEmployee")]
-        public async Task<IActionResult> deleteEmployee(AccountDeletionDto request)
+        public async Task<IActionResult> DeleteEmployee(AccountDeletionDto request)
         {
             var result = await _shopAdminService.DeleteEmployee(request);
             if (!result.result)

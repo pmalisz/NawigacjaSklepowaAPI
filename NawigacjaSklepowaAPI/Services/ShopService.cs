@@ -6,6 +6,8 @@ using NawigacjaSklepowaAPI.Services.Interfaces;
 using NawigacjaSklepowaAPI.Models.Shops;
 using NawigacjaSklepowaAPI.Models.Products;
 using Azure.Core;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace NawigacjaSklepowaAPI.Services
 {
@@ -20,9 +22,21 @@ namespace NawigacjaSklepowaAPI.Services
             _mapper = mapper;
         }
 
+        public async Task<List<Shop>> GetAll()
+        {
+            return await _context.Shops.ToListAsync();
+        }
+
         public async Task<Shop?> Get(int Id)
         {
             return await _context.Shops.FindAsync(Id);
+        }
+
+        public async Task<Shop?> GetByUserId(int userId)
+        {
+            var employee =  await _context.Employees.Include(e => e.Shop).SingleOrDefaultAsync(x => x.UserId == userId);
+
+            return employee?.Shop;
         }
 
         public async Task<(bool result, string Message)> CreateShop(ShopCreationDto shopRequest)
@@ -46,6 +60,17 @@ namespace NawigacjaSklepowaAPI.Services
             Shop shop = _mapper.Map<Shop>(shopRequest);
 
             _context.Shops.Add(shop);
+
+            await _context.SaveChangesAsync();
+
+            var employee = new Employee()
+            {
+                ShopId = shop.Id,
+                UserId = shopRequest.UserId
+            };
+
+            _context.Employees.Add(employee);
+
             await _context.SaveChangesAsync();
 
             return (true, "");

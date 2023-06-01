@@ -6,7 +6,9 @@ namespace NawigacjaSklepowaAPI.Services.Interfaces
 {
     public interface IShopService
     {
-        Task<Shop> Get(int Id);
+        Task<List<Shop>> GetAll();
+        Task<Shop?> Get(int Id);
+        Task<Shop?> GetByUserId(int userId);
         Task<(bool result, string Message)> CreateShop(ShopCreationDto request);
         Task<(bool result, string Message)> RateShop(RateShopDto request);
     }

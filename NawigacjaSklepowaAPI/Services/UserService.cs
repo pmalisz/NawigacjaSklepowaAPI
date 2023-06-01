@@ -31,5 +31,10 @@ namespace NawigacjaSklepowaAPI.Services
 
             return user;
         }
+
+        public async Task<bool> IsEmployee(int userId)
+        {
+            return await _context.Employees.AnyAsync(u => u.UserId == userId);
+        }
     }
 }

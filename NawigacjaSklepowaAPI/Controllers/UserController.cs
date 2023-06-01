@@ -22,7 +22,7 @@ namespace NawigacjaSklepowaAPI.Controllers
         public async Task<IActionResult> GetAsync()
         {
             var users = await _userService.GetAll();
-            return Ok(users);
+            return Ok(new { users });
         }
 
         [Authorize]
@@ -34,7 +34,15 @@ namespace NawigacjaSklepowaAPI.Controllers
             if (user is null)
                 return NotFound("Nie znaleziono użytkownika");
 
-            return Ok(user);
+            return Ok(new { user });
+        }
+
+        [Authorize]
+        [HttpGet("isEmployee")]
+        public async Task<IActionResult> IsEmployee(int userId)
+        {
+            var isEmployee = await _userService.IsEmployee(userId);
+            return Ok(new { isEmployee });
         }
     }
 }

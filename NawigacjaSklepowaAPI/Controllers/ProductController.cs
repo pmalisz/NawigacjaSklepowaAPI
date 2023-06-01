@@ -24,7 +24,7 @@ namespace NawigacjaSklepowaAPI.Controllers
         public async Task<IActionResult> GetGetAllForShop(int shopId)
         {
             var products = await _productService.GetAllForShop(shopId);
-            return Ok(products);
+            return Ok(new { products });
         }
 
         [HttpPost("findProduct")]
@@ -32,7 +32,7 @@ namespace NawigacjaSklepowaAPI.Controllers
         {
             var result = await _productService.FindProduct(request);
 
-            return Ok(result);
+            return Ok(new { result });
         }
 
         [Authorize]

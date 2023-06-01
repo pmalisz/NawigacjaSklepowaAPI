@@ -25,8 +25,7 @@ public class UnitTest1
                 LastName = "Kowalski",
                 Email = "test@gmail.com",
                 Password = "test",
-                RoleId = 1,
-                ShopId = 1,
+                RoleId = 1
             };
             context.Users.Add(user);
             context.SaveChanges();
@@ -38,7 +37,6 @@ public class UnitTest1
             Assert.Equal("Jan", user.FirstName);
             Assert.Equal("Kowalski", user.LastName);
             Assert.Equal(1, user.RoleId);
-            Assert.Equal(1, user.ShopId);
             context.Users.Remove(user);
             context.SaveChanges();
         }
@@ -190,25 +188,25 @@ public class UnitTest1
     public void CheckPasswordStrenght()
     {
         var password = "Test1234";
-        Assert.True(AuthService.CheckPassword(password, password).Item1);
+        Assert.True(AuthService.CheckPassword(password).Item1);
         password = "Ab123456";
-        Assert.True(AuthService.CheckPassword(password, password).Item1);
+        Assert.True(AuthService.CheckPassword(password).Item1);
         password = "0123456789yZ";
-        Assert.True(AuthService.CheckPassword(password, password).Item1);
+        Assert.True(AuthService.CheckPassword(password).Item1);
 
 
         password = "Ab012345678901234567890123456789012345678901234567890123456789";
-        Assert.False(AuthService.CheckPassword(password, password).Item1);
+        Assert.False(AuthService.CheckPassword(password).Item1);
         password = "A1234567";
-        Assert.False(AuthService.CheckPassword(password, password).Item1);
+        Assert.False(AuthService.CheckPassword(password).Item1);
         password = "a1234567";
-        Assert.False(AuthService.CheckPassword(password, password).Item1);
+        Assert.False(AuthService.CheckPassword(password).Item1);
         password = "AbCdEfGh";
-        Assert.False(AuthService.CheckPassword(password, password).Item1);
+        Assert.False(AuthService.CheckPassword(password).Item1);
         password = "Ab12345";
-        Assert.False(AuthService.CheckPassword(password, password).Item1);
-        Assert.False(AuthService.CheckPassword("Test1234", "Test4321").Item1);
-        Assert.False(AuthService.CheckPassword("Test1234", "Test12345").Item1);
+        Assert.False(AuthService.CheckPassword(password).Item1);
+        Assert.False(AuthService.CheckPassword("Test1234").Item1);
+        Assert.False(AuthService.CheckPassword("Test1234").Item1);
     }
 
     [Fact]
