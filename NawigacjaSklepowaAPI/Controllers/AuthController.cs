@@ -43,7 +43,7 @@ namespace NawigacjaSklepowaAPI.Controllers
 
             string token = _jwtProvider.Generate(user);
 
-            return Ok(token);
+            return Ok(new { token, user });
         }
 
         [Authorize]
