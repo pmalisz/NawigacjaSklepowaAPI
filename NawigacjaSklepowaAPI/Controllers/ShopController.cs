@@ -67,7 +67,7 @@ namespace NawigacjaSklepowaAPI.Controllers
             var user = _userService.UpdateRole(request.UserId, Identity.ShopAdminUserClaimName);
             string token = _jwtProvider.Generate(user.Result);
 
-            return Ok(new { token });
+            return Ok(new { token, user });
         }
 
         [Authorize]
