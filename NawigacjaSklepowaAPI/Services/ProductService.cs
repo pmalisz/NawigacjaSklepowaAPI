@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using NawigacjaSklepowaAPI.Data;
 using NawigacjaSklepowaAPI.Data.Entities;
-using NawigacjaSklepowaAPI.Helpers.Validators;
-using NawigacjaSklepowaAPI.Models.Auth;
 using NawigacjaSklepowaAPI.Models.Products;
 using NawigacjaSklepowaAPI.Services.Interfaces;
 
@@ -23,32 +20,45 @@ namespace NawigacjaSklepowaAPI.Services
 
         public async Task<List<Product>> GetAllForShop(int shopId)
         {
-            return await _context.Products.Where(p => p.ShopId == shopId).ToListAsync();
+            var shelves = _context.Shelves.Where(s => s.ShopId == shopId);
+
+            return await _context.Products.Where(p => shelves.Any(s => s.Id == p.ShelfId)).ToListAsync();
         }
 
-        public async Task<List<Product>> FindProduct(FindingProductDto request)
+        public async Task<(bool result, string Message)> CreateProduct(ProductCreationDto request)
         {
-            return await _context.Products.Where(product => product.Id == request.Id && product.ShopId == request.ShopId).ToListAsync();
-        }
+            Product product = _mapper.Map<Product>(request);
 
-        public async Task<(bool result, string Message)> CreateProduct(ProductCreationDto productRequest)
-        {
-            Product product = _mapper.Map<Product>(productRequest);
-
-            if (!_context.Shops.Any(s => s.Id == product.ShopId))
+            if (!_context.Shelves.Any(s => s.Id == product.ShelfId))
             {
-                return (false, "Nie ma takiego sklepu");
+                return (false, "Nie ma takiej półki");
             }
 
             if (_context.Products.Any(
                 p => p.Name.ToLower() == product.Name.ToLower() &&
-                p.ShopId == product.ShopId)
+                p.ShelfId == product.ShelfId)
             )
             {
-                return (false, "Ten produkt już istnieje w tym sklepie");
+                return (false, "Ten produkt już istnieje na tej półce");
             }
 
             _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            return (true, "");
+        }
+
+        public async Task<(bool result, string Message)> UpdateProduct(ProductUpdateDto request)
+        {
+            Product? product = _context.Products.Find(request.Id);
+
+            if (product is null)
+                return (false, "Nie istnieje produkt o takim Id");
+
+            product.Name = request.Name;
+            product.Description = request.Description;
+            product.Category = request.Category;
+            product.Price = request.Price;
+            product.ShelfId = request.ShelfId;
             await _context.SaveChangesAsync();
             return (true, "");
         }
@@ -58,9 +68,7 @@ namespace NawigacjaSklepowaAPI.Services
             Product? product = _context.Products.Find(request.Id);
 
             if (product is null)
-            {
                 return (false, "Nie istnieje produkt o takim Id");
-            }
 
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
