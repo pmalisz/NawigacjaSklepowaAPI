@@ -30,7 +30,7 @@ namespace NawigacjaSklepowaAPI.Services
 
             foreach(var shelfDto in request.Shelves)
             {
-                if(shelfDto.Id is null)
+                if((shelfDto.Id ?? 0) == 0)
                 {
                     Shelf createdShelf = _mapper.Map <Shelf>(shelfDto);
                     createdShelf.ShopId = request.ShopId;
