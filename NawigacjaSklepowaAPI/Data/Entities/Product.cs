@@ -14,5 +14,7 @@ namespace NawigacjaSklepowaAPI.Data.Entities
         public int RatingCount { get; set; }
         public int? ShelfId { get; set; }
         public Shelf Shelf { get; set; }
+        public int ShopId { get; set; }
+        public Shop Shop { get; set; }
     }
 }

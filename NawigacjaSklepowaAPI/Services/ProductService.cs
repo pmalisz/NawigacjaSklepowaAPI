@@ -20,19 +20,16 @@ namespace NawigacjaSklepowaAPI.Services
 
         public async Task<List<Product>> GetAllForUser(int userId)
         {
-            var users = await _context.Users.Where(u => u.Id == userId).ToListAsync();
-            var shops= await _context.Shops.Where(s => s.Email == users.First().Email).ToListAsync();
+            var shopId = _context.Employees.Single(e => e.UserId == userId).ShopId;
 
-            var shelves = _context.Shelves.Where(s => s.ShopId == shops[0].Id);
-
-            return await _context.Products.Where(p => shelves.Any(s => s.Id == p.ShelfId)).ToListAsync();
+            return await _context.Products.Where(p => p.ShopId == shopId).ToListAsync();
         }
 
         public async Task<(bool result, string Message)> CreateProduct(ProductCreationDto request)
         {
             Product product = _mapper.Map<Product>(request);
 
-            if (!_context.Shelves.Any(s => s.Id == product.ShelfId))
+            if (product.ShelfId is not null && !_context.Shelves.Any(s => s.Id == product.ShelfId))
             {
                 return (false, "Nie ma takiej półki");
             }

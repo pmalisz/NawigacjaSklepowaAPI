@@ -53,6 +53,11 @@ namespace NawigacjaSklepowaAPI.Services
 
             var shelves = _context.Shelves.Where(s => s.ShopId == request.ShopId).ToList();
             var toDelete = shelves.Where(s => !request.Shelves.Any(s2 => s2.Id == s.Id));
+
+            var productsWithoutShelves = _context.Products.Where(p => toDelete.Contains(p.Shelf));
+            foreach(var product in productsWithoutShelves)
+               product.ShelfId = null;
+
             _context.Shelves.RemoveRange(toDelete);
 
             await _context.SaveChangesAsync();
