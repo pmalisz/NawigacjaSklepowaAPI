@@ -23,8 +23,7 @@ namespace NawigacjaSklepowaAPI.Services
             var users = await _context.Users.Where(u => u.Id == userId).ToListAsync();
             var shops= await _context.Shops.Where(s => s.Email == users.First().Email).ToListAsync();
 
-            return await _context.Products.Where(p => p.ShopId == shops.First().Id).ToListAsync();
-        }
+            var shelves = _context.Shelves.Where(s => s.ShopId == shops[0].Id);
 
             return await _context.Products.Where(p => shelves.Any(s => s.Id == p.ShelfId)).ToListAsync();
         }

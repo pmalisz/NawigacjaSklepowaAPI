@@ -21,7 +21,7 @@ namespace NawigacjaSklepowaAPI.Controllers
         }
 
         [HttpGet("getByUserId")]
-        public async Task<IActionResult> GetGetAllForShop(int userId)
+        public async Task<IActionResult> GetAllForUser(int userId)
         {
             var products = await _productService.GetAllForUser(userId);
             return Ok(new { products });
