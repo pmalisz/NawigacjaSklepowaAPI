@@ -16,7 +16,6 @@ namespace NawigacjaSklepowaAPI.Data.Entities
         [DefaultValue(0)]
         public int RatingCount { get; set; }
         public ICollection<Employee> Employees { get; set; }
-        public ICollection<Product> Products { get; set; }
-        public Layout Layout { get; set; }
+        public ICollection<Shelf> Shelves { get; set; }
     }
 }

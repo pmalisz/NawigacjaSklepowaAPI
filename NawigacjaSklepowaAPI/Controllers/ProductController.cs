@@ -27,20 +27,24 @@ namespace NawigacjaSklepowaAPI.Controllers
             return Ok(new { products });
         }
 
-        [HttpPost("findProduct")]
-        public async Task<IActionResult> FindProduct(FindingProductDto request)
-        {
-            var result = await _productService.FindProduct(request);
-
-            return Ok(new { result });
-        }
-
         [Authorize]
         [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
         [HttpPost("createProduct")]
         public async Task<IActionResult> CreateProduct(ProductCreationDto request)
         {
             var result = await _productService.CreateProduct(request);
+            if (!result.result)
+                return BadRequest(result.Message);
+
+            return Ok();
+        }
+
+        [Authorize]
+        [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
+        [HttpPost("updateProduct")]
+        public async Task<IActionResult> UpdateProduct(ProductUpdateDto request)
+        {
+            var result = await _productService.UpdateProduct(request);
             if (!result.result)
                 return BadRequest(result.Message);
 

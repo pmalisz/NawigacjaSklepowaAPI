@@ -10,6 +10,7 @@ namespace NawigacjaSklepowaAPI.Services.Interfaces
         Task<List<Product>> FindProduct(FindingProductDto request);
 
         Task<(bool result, string Message)> CreateProduct(ProductCreationDto request);
+        Task<(bool result, string Message)> UpdateProduct(ProductUpdateDto request);
 
         Task<(bool result, string Message)> DeleteProduct(ProductDeletionDto request);
 
