@@ -21,9 +21,12 @@ namespace NawigacjaSklepowaAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<List<Product>> GetAllForShop(int shopId)
+        public async Task<List<Product>> GetAllForUser(int userId)
         {
-            return await _context.Products.Where(p => p.ShopId == shopId).ToListAsync();
+            var users = await _context.Users.Where(u => u.Id == userId).ToListAsync();
+            var shops= await _context.Shops.Where(s => s.Email == users.First().Email).ToListAsync();
+
+            return await _context.Products.Where(p => p.ShopId == shops.First().Id).ToListAsync();
         }
 
         public async Task<List<Product>> FindProduct(FindingProductDto request)

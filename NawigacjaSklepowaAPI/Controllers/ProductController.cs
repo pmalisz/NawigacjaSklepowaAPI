@@ -20,10 +20,10 @@ namespace NawigacjaSklepowaAPI.Controllers
             _productService = productService;
         }
 
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetGetAllForShop(int shopId)
+        [HttpGet("getByUserId")]
+        public async Task<IActionResult> GetGetAllForShop(int userId)
         {
-            var products = await _productService.GetAllForShop(shopId);
+            var products = await _productService.GetAllForUser(userId);
             return Ok(new { products });
         }
 

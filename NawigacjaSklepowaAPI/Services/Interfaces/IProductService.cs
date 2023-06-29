@@ -6,7 +6,7 @@ namespace NawigacjaSklepowaAPI.Services.Interfaces
 {
     public interface IProductService
     {
-        Task<List<Product>> GetAllForShop(int shopId);
+        Task<List<Product>> GetAllForUser(int userId);
         Task<List<Product>> FindProduct(FindingProductDto request);
 
         Task<(bool result, string Message)> CreateProduct(ProductCreationDto request);

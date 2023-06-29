@@ -5,7 +5,8 @@ using NawigacjaSklepowaAPI.Models.Auth;
 using NawigacjaSklepowaAPI.Models.Employees;
 using NawigacjaSklepowaAPI.Services.Interfaces;
 using NawigacjaSklepowaAPI.Helpers.Validators;
-
+using NawigacjaSklepowaAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace NawigacjaSklepowaAPI.Services
 {
@@ -92,6 +93,23 @@ namespace NawigacjaSklepowaAPI.Services
             _context.Employees.Remove(emp);
             await _context.SaveChangesAsync();
             return (true, "");
+        }
+
+        public async Task<List<EmployeeSimple>> GetAllEmployees()
+        {
+            var employees = await _context.Users.Join(_context.Employees,
+                                             u => u.Id,
+                                             e => e.UserId,
+                                             (u, e) => new EmployeeSimple()
+                                             {
+                                                 UserId = u.Id,
+                                                 FirstName = u.FirstName,
+                                                 LastName = u.LastName,
+                                                 RoleId = u.RoleId,
+                                                 ShopId = e.ShopId
+                                             }).ToListAsync();
+
+            return employees.Where(e => e.RoleId == (int)AccountType.Employee).ToList();
         }
     }
 }

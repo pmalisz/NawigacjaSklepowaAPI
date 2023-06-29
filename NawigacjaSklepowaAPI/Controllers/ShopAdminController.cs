@@ -25,7 +25,6 @@ namespace NawigacjaSklepowaAPI.Controllers
         [Authorize]
         [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
         [HttpPost("createEmployee")]
-        [EnableCors("Localhost")]
         public async Task<IActionResult> CreateEmployee(EmployeeCreationDto request)
         {
             var result = await _shopAdminService.CreateEmployee(request);
@@ -57,6 +56,18 @@ namespace NawigacjaSklepowaAPI.Controllers
                 return BadRequest(result.Message);
 
             return Ok();
+        }
+
+        [Authorize]
+        [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
+        [HttpGet("employees")]
+        public async Task<IActionResult> GetAllEmployees()
+        {
+            var employees = await _shopAdminService.GetAllEmployees();
+            if (employees is null)
+                return BadRequest("Nie znaleziono pracowników");
+
+            return Ok(new { employees });
         }
     }
 }
