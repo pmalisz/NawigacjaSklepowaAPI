@@ -30,7 +30,7 @@ namespace NawigacjaSklepowaAPI.Controllers
         [HttpGet("getByShopId")]
         public async Task<IActionResult> GetByShopId(int shopId)
         {
-            var products = await _productService.GetAllForUser(shopId);
+            var products = await _productService.GetAllByShopId(shopId);
             return Ok(new { products });
         }
 
