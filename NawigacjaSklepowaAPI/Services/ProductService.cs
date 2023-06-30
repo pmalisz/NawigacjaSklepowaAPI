@@ -25,6 +25,11 @@ namespace NawigacjaSklepowaAPI.Services
             return await _context.Products.Where(p => p.ShopId == shopId).ToListAsync();
         }
 
+        public async Task<List<Product>> GetAllByShopId(int shopId)
+        {
+            return await _context.Products.Where(p => p.ShopId == shopId).ToListAsync();
+        }
+
         public async Task<(bool result, string Message)> CreateProduct(ProductCreationDto request)
         {
             Product product = _mapper.Map<Product>(request);

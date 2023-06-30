@@ -27,6 +27,13 @@ namespace NawigacjaSklepowaAPI.Controllers
             return Ok(new { products });
         }
 
+        [HttpGet("getByShopId")]
+        public async Task<IActionResult> GetByShopId(int shopId)
+        {
+            var products = await _productService.GetAllForUser(shopId);
+            return Ok(new { products });
+        }
+
         [Authorize]
         [RequiresClaim(Identity.ShopAdminUserClaimName, "true")]
         [HttpPost("createProduct")]
